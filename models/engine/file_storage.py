@@ -33,6 +33,7 @@ class FileStorage:
             json.dump(temp, f)
 
     def delete(self, obj=None):
+        """Delete obj from __objests"""
         if obj is not None:
             key = f"{obj.__class__.__name__}.{obj.id}"
             if key in FileStorage.__objects:
@@ -63,3 +64,7 @@ class FileStorage:
                         self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+
+    def close(self):
+        """Deserializing the JSON file to objects"""
+        self.reload()
