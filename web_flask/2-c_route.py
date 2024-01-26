@@ -23,6 +23,7 @@ def hbnb():
     """
     return "HBNB"
 
+
 @app.route("/c/<text>", strict_slashes=False)
 def display_c(text):
     """
