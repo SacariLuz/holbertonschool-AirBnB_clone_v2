@@ -56,7 +56,7 @@ def number_template(n):
     """
     Display a HTML page only if n is an integer
     """
-    return render_template("5-number.html", n=n)
+    return render_template("5-number.html", number=n)
 
 
 if __name__ == "__main__":
