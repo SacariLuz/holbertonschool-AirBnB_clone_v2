@@ -61,7 +61,7 @@ def number_template(n):
 
 
 @app.route("/number_odd_or_even/<int:n>", strict_slashes=False)
-def  number_odd_or_even(n):
+def odd_or_even(n):
     """
     Render template if number is an integer
     identify if number is odd or even.
