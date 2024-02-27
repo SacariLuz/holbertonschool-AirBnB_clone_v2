@@ -1,29 +1,29 @@
 #!/usr/bin/python3
 """This module defines a class User"""
-import models
 from models.base_model import BaseModel, Base
-from os import getenv
-import sqlalchemy
-from sqlalchemy import Column, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String, ForeignKey, Integer
+from os import environ
+from sqlalchemy.orm import relationship, backref
+from models.place import Place
 
 
-class User(BaseModel, Base):
-    """Representation of a user """
-    if models.storage_t == 'db':
+if environ.get('HBNB_TYPE_STORAGE') == 'db':
+
+    class User(BaseModel, Base):
+        """This class defines a user by various attributes DB"""
         __tablename__ = 'users'
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
-        first_name = Column(String(128), nullable=True)
-        last_name = Column(String(128), nullable=True)
-        places = relationship("Place", backref="user")
-        reviews = relationship("Review", backref="user")
-    else:
-        email = ""
-        password = ""
-        first_name = ""
-        last_name = ""
-
-    def __init__(self, *args, **kwargs):
-        """initializes user"""
-        super().__init__(*args, **kwargs)
+        first_name = Column(String(128))
+        last_name = Column(String(128))
+        places = relationship("Place", backref="user",
+                              cascade='all, delete')
+        reviews = relationship('Review', backref='user',
+                               cascade='all, delete')
+else:
+    class User(BaseModel):
+        """This class defines a usar by various attributes FS"""
+        email = ''
+        password = ''
+        first_name = ''
+        last_name = ''
