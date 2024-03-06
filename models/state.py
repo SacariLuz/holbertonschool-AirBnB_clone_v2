@@ -8,23 +8,25 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
 
-if environ.get('HBNB_TYPE_STORAGE') == 'db':
+if getenv('HBNB_TYPE_STORAGE') == 'db':
     class State(BaseModel, Base):
-        """ State class for DB"""
-        __tablename__ = "states"
+        """ State class for ORM"""
+        __tablename__ = 'states'
         name = Column(String(128), nullable=False)
-        cities = relationship('City', backref='states', cascade='all, delete')
-
+        cities = relationship('City', backref='state',
+                              cascade='all, delete-orphan')
 else:
     class State(BaseModel):
-        """State class for FS"""
+        """ State class """
         name = ''
 
         @property
         def cities(self):
-            """Returns the list of City instances"""
             from models import storage
-            return[city
+            list_cities = []
 
-                   for city in storage.all(City).values()
-                   if city.state_id == self.id]
+            for city in storage.all(City).values():
+                if city.state_id == self.id:
+                    list_cities.append(city)
+
+            return list_cities
